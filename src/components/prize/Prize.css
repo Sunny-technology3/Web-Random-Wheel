@@ -1,0 +1,63 @@
+.prize {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(3px);
+    z-index: 9999;
+}
+
+.prize_content {
+  background: rgba(0, 0, 0, 0.4);
+  color: white;
+  padding: 30px;
+  border-radius: 12px;
+  text-align: center;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+
+h2 {
+  position: relative;
+  color: #e63946;
+  font-weight: bold;
+  overflow: visible;
+}
+
+h2::before, h2::after {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: radial-gradient(circle, #fff 0%, transparent 70%);
+  border-radius: 50%;
+  animation: sparkle 1.5s infinite ease-in-out alternate;
+}
+
+h2::before {
+  top: -10px;
+  left: 10%;
+  animation-delay: 0s;
+}
+
+h2::after {
+  top: -5px;
+  right: 15%;
+  animation-delay: 0.7s;
+}
+
+@keyframes sparkle {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1.5);
+  }
+}

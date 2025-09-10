@@ -1,7 +1,7 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { Wheel } from "react-custom-roulette";
 import './RandomWheel.css';
-import Prize from "../../components/Prize.jsx";
+import Prize from "../../components/prize/Prize.jsx";
 import { motion } from "framer-motion";
 
 import audioxoso from "../../assets/audio/xoso.mp3";
@@ -35,7 +35,7 @@ const containerMotion = {
 const data = [
     {
         option: "🍕 Pizza",
-        style: { backgroundColor: "#F7C59F", textColor: "white", },
+        style: { backgroundColor: "#F7C59F", textColor: "black", },
     },
     {
         option: "🍔 Burger",
@@ -67,9 +67,24 @@ function RandomWheel() {
     const [prizeNumber, setPrizeNumber] = useState(0);
     const [showPrize, setShowPrize] = useState("");
     const [audio, setAudio] = useState();
+    const [outerBorderColor, setOuterBorderColor] = useState("#4E5452");
+
+    useEffect(() => {
+        let interval;
+        if (!mustSpin) {
+            const colors = ["#4E5452", "#A9A9A9", "#FFD700", "#FF5733", "#33FFCC"];
+            let index = 0;
+            interval = setInterval(() => {
+                index = (index + 1) % colors.length;
+                setOuterBorderColor(colors[index]);
+            }, 200); 
+        }
+
+        return () => clearInterval(interval);
+    }, [mustSpin]);
 
     const randomAudio = () => {
-        const arrAudio = [audioxoso, audiovit];
+        const arrAudio = [audioxoso];
 
         const random = Math.floor(Math.random() * arrAudio.length);
 
@@ -106,42 +121,44 @@ function RandomWheel() {
     };
 
     return (
-        <motion.div
-            className="game"
-            variants={containerMotion}
-            initial="hide"
-            animate="visible"
-        >
-            <audio className="game_audio" ref={ref}>
-                <source src={audio} type="audio/mp3" />
-            </audio>
+        <div>
+            <motion.div
+                className="game"
+                variants={containerMotion}
+                initial="hide"
+                animate="visible"
+                style={{ position: "relative" }}
+            >
+                <audio className="game_audio" ref={ref}>
+                    <source src={audio} type="audio/mp3" />
+                </audio>
 
-            <div className="game_content">
+                <div className="game_content">
+                    <Wheel
+                        mustStartSpinning={mustSpin}
+                        prizeNumber={prizeNumber}
+                        data={data}
+                        onStopSpinning={handleSpinStop}
+                        outerBorderColor={outerBorderColor}
+                        outerBorderWidth={3}
+                        innerBorderColor="#ff0101ff"
+                        innerBorderWidth={5}
+                        radiusLineColor={outerBorderColor}
+                    />
 
-                <Wheel
-                    mustStartSpinning={mustSpin}
-                    prizeNumber={prizeNumber}
-                    data={data}
-                    onStopSpinning={handleSpinStop}
-                    outerBorderColor="#4E5452"
-                    outerBorderWidth={3}
-                    innerBorderColor="#4E5452"
-                    innerBorderWidth={3}
-                    radiusLineColor="#4E5452"
-                />
+                    <motion.button
+                        variants={buttonMotion}
+                        whileHover="hover"
+                        className="game_content_spin"
+                        onClick={handleSpinClick}
+                    >
+                        Quay thưởng
+                    </motion.button>
+                </div>
 
-                <motion.button
-                    variants={buttonMotion}
-                    whileHover="hover"
-                    className="game_content_spin"
-                    onClick={handleSpinClick}
-                >
-                    Quay thưởng
-                </motion.button>
-            </div>
-
-            {modalPrize && <Prize back={back} prize={showPrize} />}
-        </motion.div>
+                {modalPrize && <Prize back={back} prize={showPrize} />}
+            </motion.div>
+        </div>
     );
 };
 

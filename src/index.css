@@ -28,7 +28,10 @@ body {
   place-items: center;
   padding: 0;
   font-family: sans-serif;
-  background-image: url("./assets/background-image.png");
+  background-image: url("/logo.png"), url("./assets/background-image.png");
+  background-repeat: no-repeat, repeat;
+  background-position: top left, center;
+  background-size: 26%, cover;
   color: #1a1a1a;
   min-width: 320px;
   min-height: 100vh;
