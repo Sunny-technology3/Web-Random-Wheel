@@ -32,6 +32,15 @@ const containerMotion = {
     },
 };
 
+const weightedData = [
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,           // 🍕 Pizza (10%)
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, // 🍔 Burger (20%)
+    2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, // 🍣 Sushi (30%)
+    3, 3, 3, 3, 3, 3, 3, 3, 3, 3,           // 🥗 Salad (10%)
+    4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, // 🍜 Ramen (20%)
+    5, 5, 5, 5, 5, 5, 5, 5, 5, 5            // 🍩 Donut (10%)
+];
+
 const data = [
     {
         option: "🍕 Pizza",
@@ -77,7 +86,7 @@ function RandomWheel() {
             interval = setInterval(() => {
                 index = (index + 1) % colors.length;
                 setOuterBorderColor(colors[index]);
-            }, 200); 
+            }, 200);
         }
 
         return () => clearInterval(interval);
@@ -101,7 +110,8 @@ function RandomWheel() {
 
     // handle click spin button
     const handleSpinClick = () => {
-        const newPrizeNumber = Math.floor(Math.random() * data.length);
+        const randomIndex = Math.floor(Math.random() * weightedData.length);
+        const newPrizeNumber = weightedData[randomIndex]; 
         setPrizeNumber(newPrizeNumber);
         setMustSpin(true);
         updateAudio(randomAudio());
